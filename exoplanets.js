@@ -51,7 +51,7 @@ const createExoplanetsViz = () => {
 
   const tip = createTooltips()
   svg.call(tip)
-  
+
   // create defs
   const gradient = svg.append('defs')
     .append('linearGradient')
@@ -131,7 +131,7 @@ const createExoplanetsViz = () => {
   let transform
 
   d3.csv(data, type).then(data => {
-    data = data.concat(solarSystemData)
+    data = data
       .filter(x => x.pl_orbsmax > 0) // dont show exoplanets with missing orbsmax (filter this from raw data on next data update)
       .sort((a, b) => b.pl_radj - a.pl_radj)
 
@@ -322,40 +322,56 @@ const createExoplanetsViz = () => {
         exit => exit.call(exit => exit.transition().attr('r', 0).remove())
       )
 
-    nodes.filter(d => d.image)
-      .append('image')
-      .attr('xlink:href', d => d.image)
-      .attr('height', d => {
-        // Cheat the size if Saturn, because of the rings. Don't tell anyone.
-        if (d.pl_name === 'Saturn'){
-          return exoplanetRadiusScale(d.pl_radj)*3.5
-        }else{
-          return exoplanetRadiusScale(d.pl_radj)*2
-        }
-      })
-      .attr('width', d => {
-        // Cheat the size if Saturn, because of the rings. Don't tell anyone.
-        if (d.pl_name === 'Saturn'){
-          return exoplanetRadiusScale(d.pl_radj)*3.5
-        }else{
-          return exoplanetRadiusScale(d.pl_radj)*2
-        }
-      })
-      .attr('x', function() {
-        return -(d3.select(this).attr('width') / 2)
-      })
-      .attr('y', function(d) {
-        // Cheat the size if Saturn, because of the rings. Don't tell anyone.
-        return d.pl_name === 'Saturn'
-          ? -(d3.select(this).attr('height') / 2) - 4
-          : -(d3.select(this).attr('height') / 2)
-      })
+    const ssNodes = dataPoints.selectAll('image')
+      .data(solarSystemData)
+      .join(
+        enter => enter.append('image')
+        .attr('xlink:href', d => d.image)
+        .attr('height', d => {
+          // Cheat the size if Saturn, because of the rings. Don't tell anyone.
+          if (d.pl_name === 'Saturn'){
+            return exoplanetRadiusScale(d.pl_radj)*3.5
+          }else{
+            return exoplanetRadiusScale(d.pl_radj)*2
+          }
+        })
+        .attr('width', d => {
+          // Cheat the size if Saturn, because of the rings. Don't tell anyone.
+          if (d.pl_name === 'Saturn'){
+            return exoplanetRadiusScale(d.pl_radj)*3.5
+          }else{
+            return exoplanetRadiusScale(d.pl_radj)*2
+          }
+        })
+        .attr('x', function() {
+          return -(d3.select(this).attr('width') / 2)
+        })
+        .attr('y', function(d) {
+          // Cheat the size if Saturn, because of the rings. Don't tell anyone.
+          return d.pl_name === 'Saturn'
+            ? -(d3.select(this).attr('height') / 2) - 4
+            : -(d3.select(this).attr('height') / 2)
+        })
+        .on('mouseenter', d => {
+          d3.select(d3.event.currentTarget).style('stroke', 'blue')
+            .style('stroke-width', 2)
+
+          tip.show(d, d3.event.currentTarget)
+        })
+        .on('mouseleave', d =>  {
+          d3.select(d3.event.currentTarget).style('stroke', d => !d.image ? stellerTempScale(d.st_teff) :'none')
+            .style('stroke-width', 5)
+
+          tip.hide(d, d3.event.currentTarget)
+        })
+      )
 
 
     function zoomed() {
       transform = d3.event.transform
       const xt = transform.rescaleX(xScale)
       svg.select('.x.axis').call(xAxis.scale(xt))
+      ssNodes.attr('transform', d => 'translate(' + xt(d.pl_orbsmax) + ',' + 0 + ')')
       nodes.attr('transform', d => 'translate(' + xt(d.pl_orbsmax) + ',' + 0 + ')')
     }
 
