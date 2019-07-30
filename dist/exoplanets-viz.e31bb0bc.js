@@ -34757,7 +34757,8 @@ var createExoplanetsViz = function createExoplanetsViz() {
   var tip = createTooltips();
   svg.call(tip); // create defs
 
-  var gradient = svg.append('defs').append('linearGradient').attr('id', 'gradient').attr('x1', '50%').attr('y1', '100%').attr('x2', '50%').attr('y2', '0%').attr('spreadMethod', 'pad');
+  var defs = svg.append('defs');
+  var gradient = defs.append('linearGradient').attr('id', 'gradient').attr('x1', '50%').attr('y1', '100%').attr('x2', '50%').attr('y2', '0%').attr('spreadMethod', 'pad');
   gradient.append('stop').attr('offset', '0%').attr('stop-color', '#FF0000').attr('stop-opacity', 1);
   gradient.append('stop').attr('offset', '20%').attr('stop-color', '#FFA500').attr('stop-opacity', 1);
   gradient.append('stop').attr('offset', '40%').attr('stop-color', '#FFFF00').attr('stop-opacity', 1);
@@ -34765,6 +34766,11 @@ var createExoplanetsViz = function createExoplanetsViz() {
   gradient.append('stop').attr('offset', '80%').attr('stop-color', '#CCCCFF').attr('stop-opacity', 1);
   gradient.append('stop').attr('offset', '90%').attr('stop-color', '#6666FF').attr('stop-opacity', 1);
   gradient.append('stop').attr('offset', '100%').attr('stop-color', '#0000FF').attr('stop-opacity', 1);
+  var filter = defs.append('filter').attr('id', 'glow');
+  filter.append('feGaussianBlur').attr('class', 'blur').attr('stdDeviation', '4.5').attr('result', 'coloredBlur');
+  var feMerge = filter.append('feMerge');
+  feMerge.append('feMergeNode').attr('in', 'coloredBlur');
+  feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
   var container = svg.append('g').attr('id', 'container').attr('width', width).attr('transform', 'translate(' + 0 + ', ' + 0 + ')');
   svg.select('defs').append('pattern').attr('id', 'bg-pattern').attr('patternUnits', 'userSpaceOnUse').attr('width', 320).attr('height', 180).append('svg:image').attr('xlink:href', _starryBGTile.default).attr('width', 320).attr('height', 180).attr('x', 0).attr('y', 0);
   var background = container.append('rect').attr('id', 'background').attr('x', width * -500).attr('width', width * 1000).attr('height', height).attr('fill', 'url(#bg-pattern)');
@@ -34843,8 +34849,7 @@ var createExoplanetsViz = function createExoplanetsViz() {
     svg.attr('width', width).attr('height', height);
     container.select('#stellerTempLegend').attr('transform', 'translate(0, ' + (height - 100) + ')').attr('width', width).call(stellerTempLegend);
     container.select('.x.axis').attr('transform', 'translate(' + 0 + ', ' + (height - axisPadding) + ')').call(xAxis);
-    container.select('.x.axis text').attr('x', width / 2).attr('y', 40); //background.attr('height', height).attr('width', width)
-
+    container.select('.x.axis text').attr('x', width / 2).attr('y', 40);
     dataPoints.attr('transform', 'translate(' + 0 + ', ' + height / 2 + ')');
     xScale.range([0, width]);
     stellerTempLegend.labels(['M < 3,500K', 'K 3,500 - 5,000K', 'G 5,000 - 6,000K', 'F 6,000 - 7,500K', 'A 7,500 - 10,000K', 'B 10,000 - 30,000K', 'O 30,000 - 60,000K']).shapeWidth(width / 7).shapePadding(0).cells([3000, 5000, 6000, 7500, 10000, 30000, 60000]).orient('horizontal').scale(stellerTempScale);
@@ -34871,7 +34876,7 @@ var createExoplanetsViz = function createExoplanetsViz() {
     }).join(function (enter) {
       return enter.append('circle').attr('transform', function (d) {
         return 'translate(' + xt(d.pl_orbsmax) + ',' + 0 + ')';
-      }).style('pointer-events', 'all').style('fill', function (d) {
+      }).style('filter', 'url(#glow)').style('pointer-events', 'all').style('fill', function (d) {
         if (!d.image && d.pl_eqt) {
           return planetTempScale(d.pl_eqt);
         } else if (d.image) {
@@ -34879,7 +34884,7 @@ var createExoplanetsViz = function createExoplanetsViz() {
         } else {
           return 'black';
         }
-      }).style('stroke-width', 5).style('stroke', function (d) {
+      }).style('stroke-width', 2).style('stroke', function (d) {
         return !d.image ? stellerTempScale(d.st_teff) : 'none';
       }).attr('r', 0).on('mouseenter', function (d) {
         d3.select(d3.event.currentTarget).style('stroke', 'blue').style('stroke-width', 2);
@@ -34887,7 +34892,7 @@ var createExoplanetsViz = function createExoplanetsViz() {
       }).on('mouseleave', function (d) {
         d3.select(d3.event.currentTarget).style('stroke', function (d) {
           return !d.image ? stellerTempScale(d.st_teff) : 'none';
-        }).style('stroke-width', 5);
+        }).style('stroke-width', 2);
         tip.hide(d, d3.event.currentTarget);
       }).call(function (enter) {
         return enter.transition().duration(500).attr('r', function (d) {

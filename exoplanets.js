@@ -89,8 +89,9 @@ const createExoplanetsViz = () => {
   svg.call(tip)
 
   // create defs
-  const gradient = svg
-    .append('defs')
+  const defs = svg.append('defs')
+
+  const gradient = defs
     .append('linearGradient')
     .attr('id', 'gradient')
     .attr('x1', '50%')
@@ -140,6 +141,18 @@ const createExoplanetsViz = () => {
     .attr('offset', '100%')
     .attr('stop-color', '#0000FF')
     .attr('stop-opacity', 1)
+
+  const filter = defs.append('filter').attr('id', 'glow')
+
+  filter
+    .append('feGaussianBlur')
+    .attr('class', 'blur')
+    .attr('stdDeviation', '4.5')
+    .attr('result', 'coloredBlur')
+
+  var feMerge = filter.append('feMerge')
+  feMerge.append('feMergeNode').attr('in', 'coloredBlur')
+  feMerge.append('feMergeNode').attr('in', 'SourceGraphic')
 
   const container = svg
     .append('g')
@@ -351,8 +364,6 @@ const createExoplanetsViz = () => {
       .attr('x', width / 2)
       .attr('y', 40)
 
-    //background.attr('height', height).attr('width', width)
-
     dataPoints.attr('transform', 'translate(' + 0 + ', ' + height / 2 + ')')
 
     xScale.range([0, width])
@@ -401,6 +412,7 @@ const createExoplanetsViz = () => {
               'transform',
               d => 'translate(' + xt(d.pl_orbsmax) + ',' + 0 + ')'
             )
+            .style('filter', 'url(#glow)')
             .style('pointer-events', 'all')
             .style('fill', d => {
               if (!d.image && d.pl_eqt) {
@@ -411,7 +423,7 @@ const createExoplanetsViz = () => {
                 return 'black'
               }
             })
-            .style('stroke-width', 5)
+            .style('stroke-width', 2)
             .style('stroke', d =>
               !d.image ? stellerTempScale(d.st_teff) : 'none'
             )
@@ -428,7 +440,7 @@ const createExoplanetsViz = () => {
                 .style('stroke', d =>
                   !d.image ? stellerTempScale(d.st_teff) : 'none'
                 )
-                .style('stroke-width', 5)
+                .style('stroke-width', 2)
 
               tip.hide(d, d3.event.currentTarget)
             })

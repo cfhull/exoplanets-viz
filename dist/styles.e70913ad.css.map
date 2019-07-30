@@ -1,0 +1,1 @@
+{"version":3,"sources":["styles.css"],"names":[],"mappings":"AAAA,KACE,QAAS,CACT,iCACF,CAEA,KACE,4BACF","file":"styles.e70913ad.css","sourceRoot":"..","sourcesContent":["body {\n  margin: 0;\n  font-family: \"Montserrat\", sans-serif;\n}\n\ntext {\n  font-family: \"Roboto\", monospace;\n}\n"]}
