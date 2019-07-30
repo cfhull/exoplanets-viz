@@ -34553,14 +34553,14 @@ function _default() {
 
   return tip;
 }
-},{"d3-collection":"node_modules/d3-collection/src/index.js","d3-selection":"node_modules/d3-selection/src/index.js"}],"Exoplanets.css":[function(require,module,exports) {
+},{"d3-collection":"node_modules/d3-collection/src/index.js","d3-selection":"node_modules/d3-selection/src/index.js"}],"images/starryBGTile.jpg":[function(require,module,exports) {
+module.exports = "/starryBGTile.8ae3dc07.jpg";
+},{}],"Exoplanets.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"images/starryBGTile.jpeg":[function(require,module,exports) {
-module.exports = "/starryBGTile.783f1273.jpeg";
-},{}],"exoplanetData.csv":[function(require,module,exports) {
+},{"./images/starryBGTile.jpg":[["starryBGTile.8ae3dc07.jpg","images/starryBGTile.jpg"],"images/starryBGTile.jpg"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"exoplanetData.csv":[function(require,module,exports) {
 module.exports = "/exoplanetData.6800138e.csv";
 },{}],"images/mercury.png":[function(require,module,exports) {
 module.exports = "/mercury.f5fe60c7.png";
@@ -34718,7 +34718,7 @@ var _d3Tip = _interopRequireDefault(require("d3-tip"));
 
 require("./Exoplanets.css");
 
-var _starryBGTile = _interopRequireDefault(require("./images/starryBGTile.jpeg"));
+var _starryBGTile = _interopRequireDefault(require("./images/starryBGTile.jpg"));
 
 var _exoplanetData = _interopRequireDefault(require("./exoplanetData.csv"));
 
@@ -34766,7 +34766,7 @@ var createExoplanetsViz = function createExoplanetsViz() {
   gradient.append('stop').attr('offset', '90%').attr('stop-color', '#6666FF').attr('stop-opacity', 1);
   gradient.append('stop').attr('offset', '100%').attr('stop-color', '#0000FF').attr('stop-opacity', 1);
   var container = svg.append('g').attr('id', 'container').attr('width', width).attr('transform', 'translate(' + 0 + ', ' + 0 + ')');
-  svg.select('defs').append('pattern').attr('id', 'bg-pattern').attr('patternUnits', 'userSpaceOnUse').attr('width', 250).attr('height', 250).append('svg:image').attr('xlink:href', _starryBGTile.default).attr('width', 250).attr('height', 250).attr('x', 0).attr('y', 0);
+  svg.select('defs').append('pattern').attr('id', 'bg-pattern').attr('patternUnits', 'userSpaceOnUse').attr('width', 320).attr('height', 180).append('svg:image').attr('xlink:href', _starryBGTile.default).attr('width', 320).attr('height', 180).attr('x', 0).attr('y', 0);
   var background = container.append('rect').attr('id', 'background').attr('x', width * -500).attr('width', width * 1000).attr('height', height).attr('fill', 'url(#bg-pattern)');
   var dataPoints = container.append('g').attr('class', 'data-points').attr('transform', 'translate(' + 0 + ', ' + height / 2 + ')');
   var xScale = d3.scaleLinear();
@@ -34938,7 +34938,7 @@ var createExoplanetsViz = function createExoplanetsViz() {
 
     function zoomed() {
       transform = d3.event.transform;
-      background.attr('transform', "translate(".concat(-transform.x, ", 0)"));
+      background.attr('transform', "translate(".concat(-transform.x / 10, ", 0)"));
       var xt = transform.rescaleX(xScale);
       svg.select('.x.axis').call(xAxis.scale(xt));
       ssNodes.attr('transform', function (d) {
@@ -34967,7 +34967,7 @@ var createExoplanetsViz = function createExoplanetsViz() {
 
 var _default = createExoplanetsViz;
 exports.default = _default;
-},{"d3":"node_modules/d3/index.js","d3-svg-legend":"node_modules/d3-svg-legend/indexRollupNext.js","d3-tip":"node_modules/d3-tip/index.js","./Exoplanets.css":"Exoplanets.css","./images/starryBGTile.jpeg":"images/starryBGTile.jpeg","./exoplanetData.csv":"exoplanetData.csv","./solarSystemData":"solarSystemData.js","./habitablePlanets":"habitablePlanets.js"}],"index.js":[function(require,module,exports) {
+},{"d3":"node_modules/d3/index.js","d3-svg-legend":"node_modules/d3-svg-legend/indexRollupNext.js","d3-tip":"node_modules/d3-tip/index.js","./Exoplanets.css":"Exoplanets.css","./images/starryBGTile.jpg":"images/starryBGTile.jpg","./exoplanetData.csv":"exoplanetData.csv","./solarSystemData":"solarSystemData.js","./habitablePlanets":"habitablePlanets.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 require("@fortawesome/fontawesome-free/css/all.css");
@@ -35005,7 +35005,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53173" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56473" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

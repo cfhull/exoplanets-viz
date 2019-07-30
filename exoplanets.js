@@ -2,7 +2,7 @@ import * as d3 from 'd3'
 import { legendColor } from 'd3-svg-legend'
 import d3Tip from 'd3-tip'
 import './Exoplanets.css'
-import bg from './images/starryBGTile.jpeg'
+import bg from './images/starryBGTile.jpg'
 import data from './exoplanetData.csv'
 import solarSystemData from './solarSystemData'
 import habitablePlanets from './habitablePlanets'
@@ -152,12 +152,12 @@ const createExoplanetsViz = () => {
     .append('pattern')
     .attr('id', 'bg-pattern')
     .attr('patternUnits', 'userSpaceOnUse')
-    .attr('width', 250)
-    .attr('height', 250)
+    .attr('width', 320)
+    .attr('height', 180)
     .append('svg:image')
     .attr('xlink:href', bg)
-    .attr('width', 250)
-    .attr('height', 250)
+    .attr('width', 320)
+    .attr('height', 180)
     .attr('x', 0)
     .attr('y', 0)
 
@@ -504,7 +504,8 @@ const createExoplanetsViz = () => {
 
     function zoomed() {
       transform = d3.event.transform
-      background.attr('transform', `translate(${-transform.x}, 0)`)
+      background.attr('transform', `translate(${-transform.x / 10}, 0)`)
+
       const xt = transform.rescaleX(xScale)
       svg.select('.x.axis').call(xAxis.scale(xt))
       ssNodes.attr(
