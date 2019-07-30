@@ -34876,7 +34876,7 @@ var createExoplanetsViz = function createExoplanetsViz() {
     }).join(function (enter) {
       return enter.append('circle').attr('transform', function (d) {
         return 'translate(' + xt(d.pl_orbsmax) + ',' + 0 + ')';
-      }).style('filter', 'url(#glow)').style('pointer-events', 'all').style('fill', function (d) {
+      }).style('pointer-events', 'all').style('fill', function (d) {
         if (!d.image && d.pl_eqt) {
           return planetTempScale(d.pl_eqt);
         } else if (d.image) {
@@ -34887,12 +34887,10 @@ var createExoplanetsViz = function createExoplanetsViz() {
       }).style('stroke-width', 2).style('stroke', function (d) {
         return !d.image ? stellerTempScale(d.st_teff) : 'none';
       }).attr('r', 0).on('mouseenter', function (d) {
-        d3.select(d3.event.currentTarget).style('stroke', 'blue').style('stroke-width', 2);
+        d3.select(d3.event.currentTarget).style('filter', 'url(#glow)').style('stroke-width', 3);
         tip.show(d, d3.event.currentTarget);
       }).on('mouseleave', function (d) {
-        d3.select(d3.event.currentTarget).style('stroke', function (d) {
-          return !d.image ? stellerTempScale(d.st_teff) : 'none';
-        }).style('stroke-width', 2);
+        d3.select(d3.event.currentTarget).style('filter', null).style('stroke-width', 2);
         tip.hide(d, d3.event.currentTarget);
       }).call(function (enter) {
         return enter.transition().duration(500).attr('r', function (d) {
@@ -35010,7 +35008,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56473" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51336" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -412,7 +412,6 @@ const createExoplanetsViz = () => {
               'transform',
               d => 'translate(' + xt(d.pl_orbsmax) + ',' + 0 + ')'
             )
-            .style('filter', 'url(#glow)')
             .style('pointer-events', 'all')
             .style('fill', d => {
               if (!d.image && d.pl_eqt) {
@@ -430,16 +429,14 @@ const createExoplanetsViz = () => {
             .attr('r', 0)
             .on('mouseenter', d => {
               d3.select(d3.event.currentTarget)
-                .style('stroke', 'blue')
-                .style('stroke-width', 2)
+                .style('filter', 'url(#glow)')
+                .style('stroke-width', 3)
 
               tip.show(d, d3.event.currentTarget)
             })
             .on('mouseleave', d => {
               d3.select(d3.event.currentTarget)
-                .style('stroke', d =>
-                  !d.image ? stellerTempScale(d.st_teff) : 'none'
-                )
+                .style('filter', null)
                 .style('stroke-width', 2)
 
               tip.hide(d, d3.event.currentTarget)
